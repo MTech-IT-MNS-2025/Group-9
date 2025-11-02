@@ -1,0 +1,7 @@
+MNS2025031
+
+Added pages/chat.js and pages/index.js to create a basic real-time chat UI using Next.js and Socket.io.
+
+index.js: simple login page that stores the username and redirects to the chat interface.
+
+chat.js: main chat interface with message history, real-time updates, and online user list.
