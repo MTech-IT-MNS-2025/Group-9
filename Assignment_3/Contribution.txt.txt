@@ -5,3 +5,11 @@ Added pages/chat.js and pages/index.js to create a basic real-time chat UI using
 index.js: simple login page that stores the username and redirects to the chat interface.
 
 chat.js: main chat interface with message history, real-time updates, and online user list.
+
+
+MNS2025030: added pacakage.json and package-lock.json
+1. package.json – Defines your Node.js project’s metadata, scripts, and dependencies (acts as the main configuration file for npm).
+
+2. package-lock.json – Records the exact versions of installed dependencies to ensure consistent installs across environments.
+
+
