@@ -12,23 +12,18 @@ It supports user login, private chat, message storage, and chat history retrieva
 - API route to fetch chat history between two users
 - Online user tracking using Socket.io connections
 
-## Project Structure
+##Structure
 nextjs-chat/
-│
-├── models/
-│   └── Message.js          # MongoDB schema and model for chat messages
-│
-├── pages/
-│   ├── index.js            # Login page (enter username)
-│   └── chat.js             # Chat interface (send/receive messages)
-│
-├── server.js               # Main backend server with Express + Socket.io
-│
-├── package.json            # Project dependencies and scripts
-│
-├── .env                    # Environment variables (database URI, port)
-│
-└── README.txt              # Project documentation
+│   ├── models/
+│   │   └── Message.js  # MongoDB schema and model for chat messages
+│   ├── pages/
+│   │   ├── index.js    # Login page (enter username)
+│   │   └── chat.js     # Chat interface (send/receive messages)
+│   ├── server.js       # Main backend server with Express + Socket.io
+│   ├── package.json    # Project dependencies and scripts
+│   ├── .env            # Environment variables (database URI, port)
+│   └── README.txt      # Project documentation
+
 
 ## Installation and Setup Guide
 
