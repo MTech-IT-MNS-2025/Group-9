@@ -1,4 +1,4 @@
-"""# 💬 Next.js Real-Time Chat Application
+# 💬 Next.js Real-Time Chat Application
 
 This project is a **real-time chat application** built using **Next.js**, **Express.js**, **Socket.IO**, and **MongoDB**.  
 It allows users to **register**, **log in**, and **chat instantly** with other online users.
@@ -62,16 +62,27 @@ Visit http://localhost:3000 in your browser.
 ## 🗂️ Folder Structure
 
 nextjs-chat/
-├── models/                 # MongoDB Schemas (User, Message)
+
+├── models/                 # MongoDB Schemas (Message)
+
 ├── pages/
+
 │   ├── api/                # API routes (login, register, messages)
+
 │   ├── index.js            # Login page
+
 │   ├── register.js         # Registration page
+
 │   └── chat.js             # Chat interface
+
 ├── Screenshots/            # App screenshots
+
 ├── server.js               # Express + Socket.IO backend server
+
 ├── package.json            # Project dependencies
+
 ├── .env                    # Environment variables
+
 └── README.md               # Documentation
 
 ---
