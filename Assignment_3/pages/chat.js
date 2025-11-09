@@ -180,3 +180,99 @@ export default function ChatPage() {
   </button>
 </div>
 
+        {/* Messages */}
+        <div
+          ref={messagesRef}
+          style={{
+            flex: 1,
+            overflowY: 'auto',
+            padding: '16px 20px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 8,
+          background: 'linear-gradient(135deg, #f9f9f9 25%, transparent 25%), linear-gradient(225deg, #f9f9f9 25%, transparent 25%), linear-gradient(45deg, #f9f9f9 25%, transparent 25%), linear-gradient(315deg, #f9f9f9 25%, #e5ddd5 25%)',
+backgroundSize: '40px 40px',
+backgroundPosition: '0 0, 0 20px, 20px -20px, -20px 0px',
+
+          }}
+        >
+          {messages.length > 0 ? (
+            messages.map((m, idx) => (
+              <div
+                key={idx}
+                style={{
+                  alignSelf: m.incoming ? 'flex-start' : 'flex-end',
+                  background: m.incoming ? '#fff' : '#dcf8c6',
+                  borderRadius: 18,
+                  padding: '8px 14px',
+                  maxWidth: '70%',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                }}
+              >
+                <div style={{ fontSize: 13, color: '#555' }}>
+                  <b>{m.incoming ? m.sender : 'You'}</b>{' '}
+                  <span style={{ fontSize: 11, color: '#999' }}>
+                    {new Date(m.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+                <div style={{ marginTop: 5, fontSize: 15, color: '#222' }}>{m.text}</div>
+              </div>
+            ))
+          ) : (
+            <div style={{ color: '#888', textAlign: 'center', marginTop: 20 }}>No messages yet</div>
+          )}
+        </div>
+
+        {/* Message input */}
+        <form
+          onSubmit={send}
+          style={{
+            background: '#f0f0f0',
+            padding: 12,
+            display: 'flex',
+            gap: 8,
+            borderTop: '1px solid #ccc',
+          }}
+        >
+          <input
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Type a message..."
+            style={{
+              flex: 1,
+              padding: '10px 12px',
+              borderRadius: 20,
+              border: '1px solid #ccc',
+              outline: 'none',
+              fontSize: 15,
+              background: 'white',
+            }}
+            onFocus={(e) => (e.target.style.borderColor = '#34b7f1')}
+            onBlur={(e) => (e.target.style.borderColor = '#ccc')}
+          />
+          <button
+            type="submit"
+            style={{
+              background: '#34b7f1',
+              border: 'none',
+              color: 'white',
+              borderRadius: 20,
+              padding: '10px 18px',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              transition: 'background 0.2s ease, transform 0.1s ease',
+            }}
+            onMouseEnter={(e) => (e.target.style.background = '#2196f3')}
+            onMouseLeave={(e) => (e.target.style.background = '#34b7f1')}
+            onMouseDown={(e) => (e.target.style.transform = 'scale(0.95)')}
+            onMouseUp={(e) => (e.target.style.transform = 'scale(1)')}
+          >
+            ➤
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+
