@@ -101,7 +101,9 @@ Visit http://localhost:3000 in your browser.
 nextjs-chat/
 ├── models/                 # MongoDB Schemas (Message)
 ├── pages/
-│   ├── api/                # API routes (login, register, messages)
+│   ├── api/                # API routes (login, register)
+|   |     ├── register.js   
+|   |     ├── login.js             
 │   ├── index.js            # Login page
 │   ├── register.js         # Registration page
 │   └── chat.js             # Chat interface
