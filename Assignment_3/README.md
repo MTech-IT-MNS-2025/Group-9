@@ -9,89 +9,125 @@ It allows users to **register**, **log in**, and **chat instantly** with other o
 
 ### 🧩 Step 1: Install Node.js and npm
 Run the following commands in Ubuntu:
+
+```
 sudo apt update
 sudo apt install -y nodejs npm
 
+```
+
 Verify installation:
+```
 node -v
 npm -v
-
+```
 ---
 
 ### 🧩 Step 2: Install MongoDB (on Ubuntu / WSL)
+
+#### Downloads and saves MongoDB’s official GPG key to verify package authenticity.
+```
 curl -fsSL https://pgp.mongodb.com/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
-echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
-sudo apt update
+```
+
+#### Adds MongoDB’s official repository to Ubuntu’s software sources.
+```
+ echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+```
+
+#### Updates the local package list so the system recognizes the new MongoDB repository.
+
+```
+ sudo apt update
+
+```
+
+#### Installs MongoDB Community Edition and its dependencies automatically.
+
+
+```
+
 sudo apt install -y mongodb-org
+```
 
-Start and enable MongoDB service:
-sudo systemctl start mongod
-sudo systemctl enable mongod
 
-Check status:
-sudo systemctl status mongod
+ ### Start and enable MongoDB service:
+ ```
+ sudo systemctl start mongod
+ sudo systemctl enable mongod
+```
 
+### Check status:
+ ```
+ sudo systemctl status mongod 
+```
 ---
 
 ### 🧩 Step 3: Clone the Repository
+```
 cd ~
 git clone https://github.com/MTech-IT-MNS-2025/Group-9.git
 cd Group-9/Assignment_3
+```
 
 ---
 
 ### 🧩 Step 4: Install Project Dependencies
+```
 npm install
+```
 
 ---
 
 ### 🧩 Step 5: Create Environment Variables
+```
 Create a `.env` file in your root project folder:
 MONGO_URI=mongodb://localhost:27017/chatapp
 PORT=3000
+```
 
 ---
 
 ### 🧩 Step 6: Start the Application
+```
 npm run dev
-
+```
 Visit http://localhost:3000 in your browser.
 
 ---
 
 ## 🗂️ Folder Structure
-
+```
 nextjs-chat/
-
 ├── models/                 # MongoDB Schemas (Message)
-
 ├── pages/
-
 │   ├── api/                # API routes (login, register, messages)
-
 │   ├── index.js            # Login page
-
 │   ├── register.js         # Registration page
-
 │   └── chat.js             # Chat interface
-
 ├── Screenshots/            # App screenshots
-
 ├── server.js               # Express + Socket.IO backend server
-
 ├── package.json            # Project dependencies
-
 ├── .env                    # Environment variables
-
 └── README.md               # Documentation
-
+```
 ---
 
 ## 🖼️ Application Screenshots
 
-- Register Page: Screenshots/sc_ass3_1.png
-- Login Page: Screenshots/sc_ass3_2.png
-- Chat Interface: Screenshots/sc_ass3_3.png
+### 🟢 Register Page  
+<img src="./Screenshots/sc_ass3_3.png" alt="Register Page" width="600"/>
+
+---
+
+### 🔵 Login Page  
+<img src="./Screenshots/sc_ass3_2.png" alt="Login Page" width="600"/>
+
+---
+
+### 💬 Chat Interface  
+<img src="./Screenshots/sc_ass3_1.png" alt="Chat Interface" width="600"/>
+
 
 ---
 
@@ -119,6 +155,7 @@ zip -r nextjs-chat.zip models pages Screenshots server.js package.json .env READ
 M.Tech (IT) – Network & Security  
 IIIT Allahabad
 """
+MNS2025029
 MNS2025030
 MNS2025031
 Course: M.Tech (Network & Security, IT) – IIIT Allahabad
