@@ -14,7 +14,7 @@ MNS2025030: added pacakage.json and package-lock.json
 
 
 
-MNS2025029
+## MNS2025029
 
 (1) models/Message.js → Defines the MongoDB schema and model for storing chat messages (sender, receiver, text, timestamp) using Mongoose.
 
@@ -23,5 +23,6 @@ MNS2025029
 (3)pages/api folder handle user authentication
    register creates a new user by storing their username and password in MongoDB
    register creates a new user by storing their username and password in MongoDB
+
 
 
