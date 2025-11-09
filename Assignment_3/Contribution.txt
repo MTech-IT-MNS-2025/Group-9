@@ -7,6 +7,8 @@ index.js: simple login page that stores the username and redirects to the chat i
 chat.js: main chat interface with message history, real-time updates, and online user list.
 
 
+
+
 MNS2025030: added pacakage.json and package-lock.json
 1. package.json – Defines your Node.js project’s metadata, scripts, and dependencies (acts as the main configuration file for npm).
 
@@ -14,15 +16,18 @@ MNS2025030: added pacakage.json and package-lock.json
 
 
 
-## MNS2025029
+
+
+MNS2025029
 
 (1) models/Message.js → Defines the MongoDB schema and model for storing chat messages (sender, receiver, text, timestamp) using Mongoose.
 
 (2)server.js → Acts as the main backend server, combining Express, Socket.io, and Next.js to handle real-time messaging, user connections, and message storage.
 
 (3)pages/api folder handle user authentication
-   register creates a new user by storing their username and password in MongoDB
-   register creates a new user by storing their username and password in MongoDB
+   register - creates a new user by storing their username and password in MongoDB
+   login - verifies the entered credentials against the database to allow secure access.
+
 
 
 
