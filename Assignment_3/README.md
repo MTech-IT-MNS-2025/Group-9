@@ -146,10 +146,17 @@ dotenv - Environment variable management
 ---
 
 ## 🧹 Clean-up Before Submission
-
+```
 rm -rf node_modules .next
 zip -r nextjs-chat.zip models pages Screenshots server.js package.json .env README.md
+```
+## Retrieve Login
+```
+mongosh
+use nextjs-chat
+db.users.find().pretty()
 
+```
 ---
 
 ## 👨‍💻 Author
