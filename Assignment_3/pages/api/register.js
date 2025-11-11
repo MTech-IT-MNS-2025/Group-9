@@ -1,19 +1,27 @@
-// pages/api/register.js
+import fs from 'fs';
+import path from 'path';
 
-if (!global.users) global.users = []; // shared memory
+const filePath = path.join(process.cwd(), 'data', 'users.json');
 
 export default function handler(req, res) {
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const { username, password } = req.body;
+
     if (!username || !password)
-      return res.json({ success: false, message: "All fields required" });
+      return res.json({ success: false, message: 'All fields required' });
 
-    if (global.users.find((u) => u.username === username))
-      return res.json({ success: false, message: "Username already exists" });
+    // Read existing users
+    const users = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-    global.users.push({ username, password });
-    console.log("Users:", global.users); // for debugging
+    if (users.find((u) => u.username === username)) {
+      return res.json({ success: false, message: 'Username already exists' });
+    }
 
+    // Add new user
+    users.push({ username, password });
+    fs.writeFileSync(filePath, JSON.stringify(users, null, 2));
+
+    console.log('Registered Users:', users);
     return res.json({ success: true });
   }
 
