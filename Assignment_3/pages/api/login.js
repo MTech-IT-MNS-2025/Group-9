@@ -1,24 +1,24 @@
-import fs from 'fs';
-import path from 'path';
+import User from '../../models/User';
+import dbConnect from '../../utils/dbConnect';
 
-const filePath = path.join(process.cwd(), 'data', 'users.json');
+export default async function handler(req, res) {
+  await dbConnect();
 
-export default function handler(req, res) {
   if (req.method === 'POST') {
     const { username, password } = req.body;
+    try {
+      const user = await User.findOne({ username, password });
 
-    const users = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    const user = users.find(
-      (u) => u.username === username && u.password === password
-    );
+      if (!user) {
+        return res.json({ success: false, message: 'Invalid username or password' });
+      }
 
-    if (!user) {
-      return res.json({ success: false, message: 'Invalid username or password' });
+      return res.json({ success: true });
+    } catch (err) {
+      console.error('Login error:', err);
+      return res.status(500).json({ success: false, message: 'Server error' });
     }
-
-    return res.json({ success: true });
   }
 
   res.status(405).end();
 }
-
