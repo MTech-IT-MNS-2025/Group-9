@@ -1,17 +1,20 @@
-// pages/api/login.js
+import fs from 'fs';
+import path from 'path';
 
-if (!global.users) global.users = []; // same global variable
+const filePath = path.join(process.cwd(), 'data', 'users.json');
 
 export default function handler(req, res) {
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const { username, password } = req.body;
 
-    const user = global.users.find(
+    const users = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+    const user = users.find(
       (u) => u.username === username && u.password === password
     );
 
-    if (!user)
-      return res.json({ success: false, message: "Invalid username or password" });
+    if (!user) {
+      return res.json({ success: false, message: 'Invalid username or password' });
+    }
 
     return res.json({ success: true });
   }
