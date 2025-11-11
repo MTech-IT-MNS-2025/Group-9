@@ -157,6 +157,28 @@ use nextjs-chat
 db.users.find().pretty()
 
 ```
+## Switch to your app’s database
+```
+use nextjs-chat
+```
+
+## List all collections
+
+### To confirm your collections:
+```
+show collections
+```
+## View your registered users;
+```
+db.users.find().pretty()
+```
+
+## View messages
+```
+db.messages.find().pretty()
+```
+
+
 ---
 
 ## 👨‍💻 Author
