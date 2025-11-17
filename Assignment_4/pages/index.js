@@ -1,95 +1,184 @@
 "use client";
+import { useEffect, useState } from "react";
+import createRC4Module from "../public/rc4.js";
 
-import { useEffect, useState, useRef } from "react";
-
-export default function RC4Page() {
+export default function Home() {
   const [Module, setModule] = useState(null);
-  const textRef = useRef();
-  const keyRef = useRef();
-  const [output, setOutput] = useState("");
+  const [text, setText] = useState("");
+  const [key, setKey] = useState("");
+  const [result, setResult] = useState("");
 
   useEffect(() => {
-    async function load() {
-      const mod = await import("/rc4.js");
-      const createModule = mod.default || mod.createRC4Module;
-
-      const instance = await createModule({
-        locateFile: () => "/rc4.wasm",
-      });
-
-      setModule(instance);
-      console.log("WASM Loaded");
-    }
-
-    load();
+    createRC4Module().then((mod) => setModule(mod));
   }, []);
 
-  function runRC4(bytes, key) {
-    const keyBytes = new TextEncoder().encode(key);
+  function toByteArray(str) {
+    return Array.from(new TextEncoder().encode(str));
+  }
 
-    const inPtr = Module._malloc(bytes.length);
+  function fromByteArray(arr) {
+    return new TextDecoder().decode(Uint8Array.from(arr));
+  }
+
+  const encryptText = () => {
+    if (!Module) return;
+
+    const textBytes = toByteArray(text);
+    const keyBytes = toByteArray(key);
+
+    const textPtr = Module._malloc(textBytes.length);
     const keyPtr = Module._malloc(keyBytes.length);
+    const outPtr = Module._malloc(textBytes.length);
 
-    Module.HEAPU8.set(bytes, inPtr);
+    Module.HEAPU8.set(textBytes, textPtr);
     Module.HEAPU8.set(keyBytes, keyPtr);
 
-    Module._rc4_process(inPtr, bytes.length, keyPtr, keyBytes.length);
+    Module.ccall(
+      "encrypt",
+      "number",
+      ["number", "number", "number", "number", "number"],
+      [textPtr, textBytes.length, keyPtr, keyBytes.length, outPtr]
+    );
 
-    const out = new Uint8Array(bytes.length);
-    out.set(Module.HEAPU8.subarray(inPtr, inPtr + bytes.length));
+    const out = Module.HEAPU8.slice(outPtr, outPtr + textBytes.length);
+    setResult(btoa(String.fromCharCode(...out)));
 
-    Module._free(inPtr);
+    Module._free(textPtr);
     Module._free(keyPtr);
+    Module._free(outPtr);
+  };
 
-    return out;
-  }
+  const decryptText = () => {
+    if (!Module) return;
 
-  function encrypt() {
-    const text = textRef.current.value;
-    const key = keyRef.current.value;
+    const encryptedBytes = Uint8Array.from(atob(text), (c) =>
+      c.charCodeAt(0)
+    );
+    const keyBytes = toByteArray(key);
 
-    const bytes = new TextEncoder().encode(text);
-    const encrypted = runRC4(bytes, key);
+    const textPtr = Module._malloc(encryptedBytes.length);
+    const keyPtr = Module._malloc(keyBytes.length);
+    const outPtr = Module._malloc(encryptedBytes.length);
 
-    setOutput(btoa(String.fromCharCode(...encrypted)));
-  }
+    Module.HEAPU8.set(encryptedBytes, textPtr);
+    Module.HEAPU8.set(keyBytes, keyPtr);
 
-  function decrypt() {
-    const b64 = textRef.current.value;
-    const key = keyRef.current.value;
+    Module.ccall(
+      "decrypt",
+      "number",
+      ["number", "number", "number", "number", "number"],
+      [textPtr, encryptedBytes.length, keyPtr, keyBytes.length, outPtr]
+    );
 
-    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-    const decrypted = runRC4(bytes, key);
+    const out = Module.HEAPU8.slice(outPtr, outPtr + encryptedBytes.length);
+    setResult(fromByteArray(out));
 
-    setOutput(new TextDecoder().decode(decrypted));
-  }
+    Module._free(textPtr);
+    Module._free(keyPtr);
+    Module._free(outPtr);
+  };
 
   return (
-    <div style={{ padding: 20, maxWidth: 600, margin: "0 auto" }}>
-      <h1>RC4 WebAssembly</h1>
-      {!Module && <p>Loading WASM…</p>}
+    <div style={{
+      minHeight: "100vh",
+      background: "#f5f5ff",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "20px"
+    }}>
+      <div style={{
+        width: "100%",
+        maxWidth: "600px",
+        background: "white",
+        padding: "30px",
+        borderRadius: "16px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.1)"
+      }}>
+        <h1 style={{ textAlign: "center", marginBottom: "20px", color: "#333" }}>
+          🔐 RC4 WASM Encryption Tool
+        </h1>
 
-      <textarea
-        ref={textRef}
-        rows={5}
-        placeholder="Enter plaintext or ciphertext"
-        style={{ width: "100%", padding: 10, marginTop: 20 }}
-      />
+        <label style={{ fontWeight: "bold" }}>Enter Text</label>
+        <textarea
+          rows="4"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          style={{
+            width: "100%",
+            marginTop: "6px",
+            marginBottom: "20px",
+            padding: "12px",
+            borderRadius: "10px",
+            border: "1px solid #ccc",
+            fontSize: "15px"
+          }}
+        />
 
-      <input
-        ref={keyRef}
-        placeholder="Enter key"
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+        <label style={{ fontWeight: "bold" }}>Key</label>
+        <input
+          type="text"
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          style={{
+            width: "100%",
+            marginTop: "6px",
+            marginBottom: "20px",
+            padding: "12px",
+            borderRadius: "10px",
+            border: "1px solid #ccc",
+            fontSize: "15px"
+          }}
+        />
 
-      <div style={{ display: "flex", gap: 10, marginTop: 10 }}>
-        <button onClick={encrypt} style={{ flex: 1, padding: 10 }}>Encrypt</button>
-        <button onClick={decrypt} style={{ flex: 1, padding: 10 }}>Decrypt</button>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <button
+            onClick={encryptText}
+            style={{
+              flex: 1,
+              padding: "12px",
+              background: "#4a6cff",
+              color: "white",
+              border: "none",
+              borderRadius: "10px",
+              fontSize: "16px",
+              cursor: "pointer",
+              marginRight: "10px"
+            }}
+          >
+            🔒 Encrypt
+          </button>
+
+          <button
+            onClick={decryptText}
+            style={{
+              flex: 1,
+              padding: "12px",
+              background: "#00b894",
+              color: "white",
+              border: "none",
+              borderRadius: "10px",
+              fontSize: "16px",
+              cursor: "pointer",
+              marginLeft: "10px"
+            }}
+          >
+            🔓 Decrypt
+          </button>
+        </div>
+
+        <h3 style={{ marginTop: "30px", fontWeight: "bold" }}>Result</h3>
+        <div style={{
+          background: "#f0f0ff",
+          padding: "15px",
+          borderRadius: "10px",
+          minHeight: "80px",
+          whiteSpace: "pre-wrap",
+          fontSize: "15px"
+        }}>
+          {result || "Result will appear here..."}
+        </div>
       </div>
-
-      <pre style={{ marginTop: 20, padding: 10, background: "#eee" }}>
-        {output}
-      </pre>
     </div>
   );
 }
