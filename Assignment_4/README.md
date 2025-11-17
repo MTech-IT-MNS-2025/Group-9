@@ -18,6 +18,7 @@ Learning Outcomes
 ----------------------------------------------------
 Project Folder Structure
 ----------------------------------------------------
+```
 rc4-wasm-demo/
 │
 ├── rc4.c                (RC4 algorithm)
@@ -29,6 +30,7 @@ rc4-wasm-demo/
 │
 └── pages/
     └── index.js         (Next.js frontend UI)
+```
 
 ----------------------------------------------------
 RC4 Implementation (rc4.c)
