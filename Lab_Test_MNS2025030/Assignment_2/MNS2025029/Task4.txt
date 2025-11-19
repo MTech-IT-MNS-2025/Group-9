@@ -1,0 +1,39 @@
+Task 4 – Comparison Report
+IC Lab Assignment 2
+M.Tech (IT – Network & Security)
+IIIT Allahabad
+
+--------------------------------------------
+Objective:
+To compare the performance and features of different Post-Quantum Cryptographic algorithms using the liboqs library.
+
+--------------------------------------------
+Algorithms Tested:
+1. Kyber512  –  Key Encapsulation Mechanism (KEM)
+2. NTRU-HPS-2048-509  –  KEM Alternative Comparison
+3. Dilithium2  –  Digital Signature Scheme
+
+--------------------------------------------
+Observations:
+• All KEM algorithms successfully generated and recovered matching shared secrets.  
+• Kyber512 showed the fastest key generation and encapsulation time.  
+• NTRU produced slightly larger keys but similar performance.  
+• Dilithium2 generated valid digital signatures that verified correctly.  
+• Signature schemes require larger key and signature sizes than KEMs.  
+
+--------------------------------------------
+Sample Timing Results (approx.)
+| Algorithm     | Type | Keygen (ms) | Encapsulation (ms) | Decapsulation (ms) | Signature (bytes) |
+|---------------|------|-------------|--------------------|--------------------|-------------------|
+| Kyber512      | KEM  | 2.5         | 0.8                | 0.6                | –                 |
+| NTRU-HPS-509  | KEM  | 4.1         | 1.3                | 0.7                | –                 |
+| Dilithium2    | SIG  | 3.5         | –                  | –                  | ~2700             |
+
+--------------------------------------------
+Conclusion:
+Post-Quantum Cryptography ensures security against future quantum computers.
+KEMs like Kyber and NTRU are efficient for key exchange,
+while signature schemes like Dilithium2 provide authentication.
+Kyber512 is the most efficient among tested algorithms.
+
+--------------------------------------------

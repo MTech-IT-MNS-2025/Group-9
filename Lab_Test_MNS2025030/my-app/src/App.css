@@ -1,0 +1,76 @@
+/* Full page background */
+.container {
+  height: 100vh;
+  width: 100%;
+  background-color: #f1f1f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main card */
+.card {
+  width: 420px;
+  padding: 30px;
+  background: white;
+  border: 1px solid #cccccc;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+/* Title */
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #333333;
+  text-align: center;
+}
+
+/* Input boxes */
+.inputBox {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  font-size: 16px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  outline: none;
+  background-color: #fafafa;
+}
+
+.inputBox:focus {
+  border-color: #0066cc;
+  background-color: #ffffff;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 17px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background-color: #004a99;
+}
+
+/* Output box */
+.outputBox {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #666;
+  background-color: #f9f9f9;
+  color: #333;
+  border-radius: 5px;
+  font-weight: 500;
+  text-align: left;
+  white-space: pre-line;
+}
