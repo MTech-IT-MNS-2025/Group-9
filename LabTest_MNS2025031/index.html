@@ -1,0 +1,54 @@
+<html>
+<head>
+  <title>DH Key Exchange</title>
+</head>
+
+<body>
+  <h2>Diffie–Hellman Key Establishment</h2>
+
+  <label>Enter p: </label>
+  <input id="p" /><br><br>
+
+  <label>Enter g: </label>
+  <input id="g" /><br><br>
+
+  <button onclick="computeDH()">Compute</button>
+
+  <h3>Result:</h3>
+  <div id="output"></div>
+
+  <script src="myProg.js"></script>
+
+  <script>
+    let modexp;
+
+    Module['onRuntimeInitialized'] = () => {
+      modexp = Module.cwrap("modexp", "number", ["number", "number", "number"]);
+    };
+
+    async function computeDH() {
+      const p = parseInt(document.getElementById("p").value);
+      const g = parseInt(document.getElementById("g").value);
+
+      // random a in Zp*
+      const a = Math.floor(Math.random() * (p - 2)) + 2;
+
+      // x = g^a mod p   (via WASM)
+      const x = modexp(g, a, p);
+
+      // send to server
+      const response = await fetch("http://localhost:3000/run", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ g, p, x })
+      });
+
+      const data = await response.json();
+
+      document.getElementById("output").innerHTML =
+        `K = ${data.K}<br>y = ${data.y}<br>a = ${a}`;
+    }
+  </script>
+</body>
+</html>
+
