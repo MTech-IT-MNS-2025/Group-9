@@ -43,6 +43,8 @@ All messages are stored **only in encrypted form**, ensuring **even the server c
 ### 💬 Chat Interface
 ![Chat](https://raw.githubusercontent.com/MTech-IT-MNS-2025/Group-9/main/Assignment_5/Screenshots/chat.png)
 
+### 🗄️ Encrypted Database (MongoDB Proof)
+![Database](https://github.com/MTech-IT-MNS-2025/Group-9/blob/main/Assignment_5/Screenshots/database.png?raw=true)
 
 ---
 
