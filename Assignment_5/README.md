@@ -32,6 +32,20 @@ All messages are stored **only in encrypted form**, ensuring **even the server c
 
 ---
 
+## 📸 Screenshots
+
+### 🔐 Login Page
+![Login](https://raw.githubusercontent.com/MTech-IT-MNS-2025/Group-9/main/Assignment_5/Screenshots/login.png)
+
+### 📝 Register Page
+![Register](https://raw.githubusercontent.com/MTech-IT-MNS-2025/Group-9/main/Assignment_5/Screenshots/register.png)
+
+### 💬 Chat Interface
+![Chat](https://raw.githubusercontent.com/MTech-IT-MNS-2025/Group-9/main/Assignment_5/Screenshots/chat.png)
+
+
+---
+
 ## 🏗️ Project Architecture
 
 ```text
