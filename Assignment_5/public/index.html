@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PQC Secure Chat</title>
+  <script src="/socket.io/socket.io.js"></script>
+  <!-- Crypto Logic -->
+  <script src="js/crypto-client.js"></script>
+  <!-- App Logic -->
+  <script src="js/app.js" defer></script>
+
+  <style>
+    body { margin: 0; font-family: "Segoe UI", sans-serif; background: #111b21; color: #e9edef; }
+    .hidden { display: none !important; }
+    
+    /* AUTH SCREEN */
+    .auth-container { height: 100vh; display: flex; align-items: center; justify-content: center; }
+    .auth-box { background: #202c33; padding: 30px; border-radius: 10px; width: 400px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+    h2 { margin-top: 0; color: #00a884; text-align: center; }
+    input, textarea { 
+      width: 100%; padding: 12px; margin: 8px 0; background: #2a3942; border: 1px solid #2a3942; 
+      color: white; border-radius: 5px; box-sizing: border-box; font-family: monospace;
+    }
+    textarea { height: 80px; resize: none; font-size: 11px; }
+    button { width: 100%; padding: 12px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+    .btn-primary { background: #00a884; color: #111b21; }
+    .btn-secondary { background: #202c33; color: #00a884; border: 1px solid #00a884; }
+    .helper-text { font-size: 12px; color: #8696a0; margin-bottom: 10px; text-align: center; }
+
+    /* CHAT SCREEN */
+    .chat-container { display: flex; height: 100vh; }
+    .sidebar { width: 300px; background: #202c33; border-right: 1px solid #2f3b43; display: flex; flex-direction: column; }
+    .chat-area { flex: 1; display: flex; flex-direction: column; background: #0b141a; position: relative; }
+    
+    .user-list { flex: 1; overflow-y: auto; }
+    .user-item { padding: 15px; cursor: pointer; border-bottom: 1px solid #2f3b43; display: flex; align-items: center; }
+    .user-item:hover { background: #2a3942; }
+    .user-item.active { background: #2a3942; border-left: 4px solid #00a884; }
+    .status-dot { height: 10px; width: 10px; background-color: #00a884; border-radius: 50%; margin-right: 10px; }
+
+    .chat-header { padding: 15px; background: #202c33; border-bottom: 1px solid #2f3b43; font-weight: bold; }
+    .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px; }
+    
+    .msg { max-width: 60%; padding: 10px 15px; border-radius: 10px; font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+    .msg.sent { align-self: flex-end; background: #005c4b; color: white; }
+    .msg.received { align-self: flex-start; background: #202c33; color: white; }
+    
+    .input-area { padding: 15px; background: #202c33; display: flex; gap: 10px; }
+    .input-area input { margin: 0; border-radius: 20px; }
+    .send-btn { width: auto; margin: 0; padding: 0 20px; border-radius: 20px; }
+
+    .key-gen-area { text-align: center; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
+  </style>
+</head>
+<body>
+
+  <!-- AUTHENTICATION -->
+  <div id="authScreen" class="auth-container">
+    <div class="auth-box">
+      <h2 id="authTitle">Login</h2>
+      
+      <!-- Key Generation Helper (Simulating C Program) -->
+      <div id="keyGenSection" class="key-gen-area hidden">
+        <p class="helper-text">Simulate "Standalone C Program" Key Gen</p>
+        <button onclick="generateKeysForUI()" class="btn-secondary" style="font-size:12px; padding:5px;">Generate New PQC Pair</button>
+      </div>
+
+      <input id="username" placeholder="Username" autocomplete="off">
+      <input id="password" type="password" placeholder="Password">
+
+      <!-- Login: Needs Private Key. Register: Needs Public Key. -->
+      <div id="loginKeySection">
+        <p class="helper-text">Enter your <b>Private Key</b> to decrypt messages:</p>
+        <textarea id="privateKeyInput" placeholder="Paste Private Key (Hex)..."></textarea>
+      </div>
+
+      <div id="registerKeySection" class="hidden">
+        <p class="helper-text">Enter your <b>Public Key</b> for others to find you:</p>
+        <textarea id="publicKeyInput" placeholder="Paste Public Key (Hex)..."></textarea>
+      </div>
+
+      <button id="mainAuthBtn" class="btn-primary" onclick="handleAuth()">Login</button>
+      <button id="toggleAuthBtn" class="btn-secondary" onclick="toggleMode()">Switch to Register</button>
+    </div>
+  </div>
+
+  <!-- CHAT INTERFACE -->
+  <div id="chatScreen" class="chat-container hidden">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div style="padding: 20px; background: #202c33; border-bottom: 1px solid #333;">
+        <h3 style="margin:0; color: #00a884;">PQC Chat</h3>
+        <div style="font-size: 12px; color: #8696a0; margin-top:5px;">User: <span id="currentUserDisplay"></span></div>
+      </div>
+      <div id="userList" class="user-list"></div>
+      <button onclick="logout()" class="btn-secondary" style="margin: 10px; width: calc(100% - 20px);">Logout</button>
+    </div>
+
+    <!-- Main Chat -->
+    <div class="chat-area">
+      <div id="chatHeader" class="chat-header">Select a user to chat</div>
+      <div id="messageBox" class="messages"></div>
+      <div class="input-area">
+        <input id="msgInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()">
+        <button onclick="sendMessage()" class="send-btn btn-primary">Send</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
